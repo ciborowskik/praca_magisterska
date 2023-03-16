@@ -262,7 +262,10 @@ class App(QMainWindow):
         self.show_stats_button.setDisabled(not stats_exist)
 
     def run_codec_handler(self):
-        run_codec(self.sequence_path, self.config)
+        self.disable_ui()
+
+        worker = CodecWorker(run_codec, self.enable_ui, self.sequence_path, self.config)
+        self.threadpool.start(worker)
 
     def play_sequence_handler(self):
         YuvPlayer(self.sequence_path, self.config, True, False, False, False, self.zoom, self.fps).play()
